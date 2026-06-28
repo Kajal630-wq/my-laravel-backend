@@ -3,14 +3,12 @@ services:
     name: my-laravel-backend
     env: php
     plan: free
-    buildCommand: |
-      composer install --no-dev --optimize-autoloader
-      php artisan config:cache
-      php artisan route:cache
-      chmod -R 775 storage bootstrap/cache
-    startCommand: php artisan serve --host=0.0.0.0 --port=8080
+    buildCommand: "composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && php artisan storage:link"
+    startCommand: "php artisan serve --host=0.0.0.0 --port=$PORT"
     envVars:
-            - key: APP_ENV
-        value: production
             - key: APP_KEY
         generateValue: true
+            - key: APP_ENV
+        value: production
+            - key: APP_DEBUG
+        value: false
