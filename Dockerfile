@@ -18,7 +18,8 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 RUN cp .env.example .env
-
+RUN composer config --global github-protocols https
+RUN composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction
 RUN composer install --no-dev --optimize-autoloader
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
