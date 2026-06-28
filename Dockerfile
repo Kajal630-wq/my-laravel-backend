@@ -12,8 +12,7 @@ COPY . /app
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 RUN php artisan config:cache
 RUN php artisan route:cache
-RUN rm -rf public/storage
-RUN php artisan storage:link || true
-EXPOSE 8080
+RUN chmod -R 775 storage bootstrap/cache
+
 EXPOSE 8080
 CMD php artisan serve --host=0.0.0.0 --port 8080
