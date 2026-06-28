@@ -14,4 +14,6 @@ COPY . /var/www/html
 RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 EXPOSE 10000
+RUN php artisan key:generate --force
+RUN php artisan config:cache
 CMD php artisan serve --host=0.0.0.0 --port=10000
