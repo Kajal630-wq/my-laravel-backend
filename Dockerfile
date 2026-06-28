@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -17,15 +17,18 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
+RUN cp .env.example .env
+
 RUN composer install --no-dev --optimize-autoloader
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-RUN cp .env.example .env
+RUN php artisan key:generate
 
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
 
 EXPOSE 10000
+
 CMD php artisan serve --host=0.0.0.0 --port=10000
